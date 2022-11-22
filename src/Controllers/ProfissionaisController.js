@@ -74,41 +74,40 @@ class ProfissionaisController {
   }
 
   async show(request, response) {
-    const {id} = request.params //vamos pegar o id que foi passado como um parâmetro para poder encontrar a nota do usuário
-    const note = await knex("profissionais").where({id}).first(); //pegando a primeira nota com first, sempre vai retornar uma única nota do id especificado
-    const tags = await knex("tags").where({profissional_id: id}).orderBy("name"); //pegando a tag onde o note_id vai ser igual ao id passado no parâmetro/rota - orderBy é pra colocar em ordem alfabética
-    const links = await knex("links").where({note_id: id}).orderBy("created_at")
-    return response.json({...note, tags, links}); // os '...' é para 'despejar' os detalhes de note
+    const { id } = request.params //vamos pegar o id que foi passado como um parâmetro para poder encontrar a nota do usuário
+    const profissional = await knex("profissionais").where({ id }).first(); //pegando a primeira nota com first, sempre vai retornar uma única nota do id especificado
+    const tags = await knex("tags").where({ profissional_id: id }).orderBy("name"); //pegando a tag onde o note_id vai ser igual ao id passado no parâmetro/rota - orderBy é pra colocar em ordem alfabética
+    return response.json({ ...profissional, tags }); // os '...' é para 'despejar' os detalhes de note
   }
 
   async delete(request, response) { //criando a funcionalidade de deletar
-    const {id} = request.params;
-    await knex("notes").where({id}).delete(); //tudo vai ser deletado em cascata, links, tags, pois essas tabelas tem relação com notes
+    const { id } = request.params;
+    await knex("profissionais").where({ id }).delete(); //tudo vai ser deletado em cascata, links, tags, pois essas tabelas tem relação com notes
     return response.json()
   }
 
   async index(request, response) { //criando funcionalidade que vai ser responsável por listar todos os notes de um usuário
-    const {title, tags} = request.query;
+    const { nome, área, tags } = request.query;
     const user_id = request.user.id
-    let notes;
-    
+    let profissionais;
+
     if (tags) { //se existir tags vai ocorrer a consulta esse chaves, se não vai ser realizada a consulta abaixo no else
       const filterTags = tags.split(',').map(tag => tag.trim()); //vamos dividir os elementos a partir da vírgula e cada elemento fará parte de um vetor/array - map pra pegar somente a tag (vai pegar cada tag do vetor) - função TRIM apara uma string removendo os espaços em branco iniciais e finais
-      notes = await knex("tags").select(["notes.id", "notes.title", "notes.user_id"]).where("notes.user_id", user_id).whereLike("notes.title", `%${title}%`).whereIn("name", filterTags).innerJoin("notes", "notes.id", "tags.note_id").groupBy("notes.id").orderBy("notes.title") //analisar notes baseado na tag - vamos passar o "name" (nome da tag) e o vetor pra comparar se a tag existe ou não - no select vamos colocar um array com os campos que queremos selecionar de ambas as tabelas - também vamos filtrar baseado no id do usuário - innerJoin é pra conectar uma tabela com a outra, vamos colocar a tabela notes e os campos que vão ser conectados - groupBy é uma funcionalidade do banco de dados que permite fazer agrupamentos sem repetir os elementos (não vai repetir notes com o mesmo id)
+      profissionais = await knex("tags").select(["profissionais.nome", "profissionais.avatar", "profissionais.descrição", "profissionais.áreas", "tags.name"]).whereLike("profissionais.nome", `%${nome}%`).whereIn("tags.name", filterTags).whereIn("profissionais.área", área).innerJoin("profissionais", "profissionais.id", "tags.profissional_id").orderBy("profissinais.nome") //analisar notes baseado na tag - vamos passar o "name" (nome da tag) e o vetor pra comparar se a tag existe ou não - no select vamos colocar um array com os campos que queremos selecionar de ambas as tabelas - também vamos filtrar baseado no id do usuário - innerJoin é pra conectar uma tabela com a outra, vamos colocar a tabela notes e os campos que vão ser conectados - groupBy é uma funcionalidade do banco de dados que permite fazer agrupamentos sem repetir os elementos (não vai repetir notes com o mesmo id)
     } else {
-    notes = await knex("notes").where({user_id}).whereLike("title", `%${title}%`).orderBy("title") //vai mostrar o notes de um usuário determinado - where é para filtrar - orderBy é pra deixar em ordem alfabética de acordo com o title - whereLike ajuda a buscar valores que contenham uma palavra determinada no meio de outras, a porcentagem antes e depois de title é porque vai ser ignorado o que vem antes e depois da palavra, vai ser procurado a palavra, ou uma cadeia de caracteres
+      notes = await knex("notes").where({ user_id }).whereLike("title", `%${title}%`).orderBy("title") //vai mostrar o notes de um usuário determinado - where é para filtrar - orderBy é pra deixar em ordem alfabética de acordo com o title - whereLike ajuda a buscar valores que contenham uma palavra determinada no meio de outras, a porcentagem antes e depois de title é porque vai ser ignorado o que vem antes e depois da palavra, vai ser procurado a palavra, ou uma cadeia de caracteres
     }
 
-    const userTags = await knex("tags").where({user_id}) //fazendo filtro nas tags onde o id seja igual do user_id
-    const notesWithTags = notes.map(note => { //percorrendo todas as notas e executando a função pra cada 'note' (variável auxiliar)
-      const noteTags = userTags.filter(tag => tag.note_id === note.id) //filtrando as tags da nota - comparando se note_id da tag é igual ao note.id 
+    const Tags = await knex("tags") //fazendo filtro nas tags onde o id seja igual do user_id
+    const ProfissionaisComTags = profissionais.map(note => { //percorrendo todas as notas e executando a função pra cada 'note' (variável auxiliar)
+      const ProfissionaisTags = Tags.filter(tag => tag.profissional_id === profissionais.id) //filtrando as tags da nota - comparando se note_id da tag é igual ao note.id 
       return {
-        ...note,
-        tags: noteTags
+        ...profissional,
+        tags: ProfissionaisTags
       }
-    }) 
+    })
 
-    return response.json(notesWithTags) 
-  }  
+    return response.json(ProfissionaisComTags)
+  }
 }
 module.exports = ProfissionaisController;

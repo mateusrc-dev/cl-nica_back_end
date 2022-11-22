@@ -4,7 +4,7 @@ const { compare } = require("bcrypt")
 const authConfig = require("../configs/auth")
 const { sign } = require("jsonwebtoken")
 
-class SessionsAdmController {
+class SessionsProfissionalController {
   async create(request, response) {
     const { email, password } = request.body
     const user = await knex("adm").where({ email }).first()
@@ -21,4 +21,4 @@ class SessionsAdmController {
   }
 }
 
-module.exports = SessionsAdmController
+module.exports = SessionsProfissionalController
