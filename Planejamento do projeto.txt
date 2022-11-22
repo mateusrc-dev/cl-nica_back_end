@@ -1,0 +1,48 @@
+## projeto pessoal clínica - inspirado no site psicologia viva
+
+# aqui vou jogar minhas ideias sobre o projeto para planejar melhor (pode ser alterado a qualquer momento)
+
+O projeto vai ter um banco de dados e a parte do cliente (front e back-end)
+
+Será um projeto com responsividade (desktop e mobile)
+
+Terá a possibilidade do adm. cadastrar o profissional e do cliente se cadastrar para escolher um profissional e agendar um horário
+
+A página inicial terá informações sobre a clínica, imagens sobre a clínica, informações de quais tipos de profissionais ela possui e localização,
+e terá uma parte para o cliente logar, o cliente poderá ver os profissionais e os detalhes deles, só poderá agendar se estiver logado, 
+ao tentar agendar a consulta, se não estiver logado, será encaminhado para a página de login onde poderá criar uma conta caso não possua
+
+Na página inicial também terá uma aba para logar - nessa parte o cliente pode criar uma conta para logar - terá uma parte para o profissional
+logar, mas não terá como criar uma conta como profissional, quem vai dar a conta ao profissional é o adm, no site não será possível criar uma
+conta de profissional :)
+
+O cliente na aplicação vai ter acesso a opções de profissionais de acordo com suas áreas, ao clicar
+no profissional vai aparecer a foto dele, uma descrição sobre ele, o que ele faz, e seus horários disponíveis, o cliente
+poderá agendar um horário, ao clicar no horário, irá abrir uma janela de pagamento, ao finalizar o pagamento, o horário é
+agendado e fica indisponível para outras pessoas, o cliente também poderá dar uma nota ao profissional (clicar nas estrelas),
+essa nota vai ser calculada com todas as notas dadas para aquele profissional para gerar uma média, e também o cliente poderá
+escrever um depoimento (vai ter uma parte na página "Avalie este profissional" para poder fazer a avaliação) - na parte que mostra 
+os detalhes do profissional vai ter uma parte "Depoimentos" com as estrelas que as pessoas avaliaram com o respectivo depoimento delas
+
+Também na página onde mostra os profissionais o usuário poderá pesquisar por nome do profissional, área do profissional e tags que o
+profissional cadastrar, e também poderá favoritar seu profissional caso goste muito dele
+
+Na parte do profissional, ele pode logar na sua conta, alterar sua foto e descrição sobre o que faz, pode alterar os seus
+horários disponíveis, colocar tags, e vai aparecer também as pessoas que agendaram uma consulta no respectivo horário para ele, com as
+informações sobre esse usário, como nome, foto, queixas...
+
+Que tal tentar criar um chat entre cliente e profissional? (DESAFIO) ;) - pesquisar na internet como poderia ser feito!
+
+A aplicação é para agendar consultas presenciais :)
+
+# Banco de dados que a aplicação vai ter (pode ser alterado a qualquer momento de acordo com os insight's):
+
+- Usuário (id, nome, email, avatar, queixas, create, update)
+- Profissionais (id, email, nome, área, descrição, tags, avatar, create, update)
+- Avaliações (id, id_user, id_profissional, depoimento, nota)
+- Horários (id, dia, horário, disponibilidade, id_profissional)
+- Adm (id, nome, email, create, update)
+- Favorites (id, user_id, profissional_id)
+- Mensagens (id, mensagem, create)
+- MensagensUser (id, id_mensagem, id_user)
+- MensagensProfissional (id, id_mensagem, id_profissional)
