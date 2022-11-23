@@ -7,7 +7,7 @@ const ensureAuthenticated = require("../middlewares/ensureAuthenticated")
 favoritesRoutes.use(ensureAuthenticated)
 favoritesRoutes.post("/", favoritesController.create)
 favoritesRoutes.get("/", favoritesController.index)
-favoritesRoutes.delete("/:id", favoritesController.delete)
-favoritesRoutes.get("/:id", favoritesController.show)
+favoritesRoutes.delete("/", favoritesController.delete)
+favoritesRoutes.get("/:profissional_id", favoritesController.show)
 
 module.exports = favoritesRoutes 
