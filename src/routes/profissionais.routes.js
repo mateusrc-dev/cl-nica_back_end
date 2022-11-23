@@ -7,7 +7,7 @@ const ensureAuthenticated = require("../middlewares/ensureAuthenticated")
 profissionaisRoutes.post("/", profissionaisController.create)
 profissionaisRoutes.put("/", ensureAuthenticated, profissionaisController.update)
 profissionaisRoutes.get("/:id", ensureAuthenticated, profissionaisController.show)
-profissionaisRoutes.get("/", ensureAuthenticated, profissionaisController.index)
-profissionaisRoutes.delete("/", ensureAuthenticated, profissionaisController.delete)
+profissionaisRoutes.get("/", profissionaisController.index)
+profissionaisRoutes.delete("/:id", ensureAuthenticated, profissionaisController.delete)
 
 module.exports = profissionaisRoutes

@@ -1,6 +1,7 @@
 const { hash, compare } = require("bcrypt")
 const AppError = require("../utils/AppError")
 const sqliteConnection = require("../database/sqlite")
+const knex = require("../database/knex")
 
 class ProfissionaisController {
 
@@ -30,17 +31,21 @@ class ProfissionaisController {
       throw new AppError("Profissional não encontrado!")
     }
     const userWithUpdatedEmail = await database.get("SELECT * FROM profissionais WHERE email = (?)", [email]) //selecionando todas as colunas da linha que tem o respectivo email
-    if (userWithUpdatedEmail && userWithUpdatedEmail.id !== user.id) { //verificando se a pessoa está tentando mudar um email pra outro que é usado por outra pessoa
+    if (userWithUpdatedEmail && userWithUpdatedEmail.id !== user.id ) { //verificando se a pessoa está tentando mudar um email pra outro que é usado por outra pessoa
       throw new AppError("Este e-mail já está em uso!")
     }
 
     const tagsInsert = tags.map(name => {
       return {
-        profissional_id: user_id,
-        name
+        name,
+        profissional_id: user_id
       }
     })
 
+    const tagsExist = await knex("tags").where({ profissional_id: user_id })
+    if (tagsExist) {
+      await knex("tags").where({ profissional_id: user_id }).delete()
+    }
     await knex("tags").insert(tagsInsert)
 
     user.name = name ?? user.name //atualizando o nome do user que foi pego através do id - a interrogação significa que se não existir conteúdo dentro de name então vai ser utilizado o user.name - as interrogações é um null operator
@@ -86,23 +91,34 @@ class ProfissionaisController {
     return response.json()
   }
 
-  async index(request, response) { //criando funcionalidade que vai ser responsável por listar todos os notes de um usuário
-    const { nome, área, tags } = request.query;
-    const user_id = request.user.id
+  async index(request, response) { 
+    const { name, área, tags } = request.query;
     let profissionais;
 
-    if (tags) { //se existir tags vai ocorrer a consulta esse chaves, se não vai ser realizada a consulta abaixo no else
-      const filterTags = tags.split(',').map(tag => tag.trim()); //vamos dividir os elementos a partir da vírgula e cada elemento fará parte de um vetor/array - map pra pegar somente a tag (vai pegar cada tag do vetor) - função TRIM apara uma string removendo os espaços em branco iniciais e finais
-      profissionais = await knex("tags").select(["profissionais.nome", "profissionais.avatar", "profissionais.descrição", "profissionais.áreas", "tags.name"]).whereLike("profissionais.nome", `%${nome}%`).whereIn("tags.name", filterTags).whereIn("profissionais.área", área).innerJoin("profissionais", "profissionais.id", "tags.profissional_id").orderBy("profissinais.nome") //analisar notes baseado na tag - vamos passar o "name" (nome da tag) e o vetor pra comparar se a tag existe ou não - no select vamos colocar um array com os campos que queremos selecionar de ambas as tabelas - também vamos filtrar baseado no id do usuário - innerJoin é pra conectar uma tabela com a outra, vamos colocar a tabela notes e os campos que vão ser conectados - groupBy é uma funcionalidade do banco de dados que permite fazer agrupamentos sem repetir os elementos (não vai repetir notes com o mesmo id)
+    if (tags) { 
+      const filterTags = tags.split(',').map(tag => tag.trim()); 
+      profissionais = await knex("profissionais")
+      .select([
+        "profissionais.id",
+        "profissionais.name",
+        "profissionais.descrição",
+        "profissionais.área",
+        "profissionais.avatar"
+      ])
+      .whereLike("profissionais.name", `%${name}%`)
+      .whereLike("profissionais.área", `%${área}%`)
+      .whereIn("tags.name", filterTags)
+      .innerJoin("tags", "tags.profissional_id", "profissionais.id")
+      
     } else {
-      notes = await knex("notes").where({ user_id }).whereLike("title", `%${title}%`).orderBy("title") //vai mostrar o notes de um usuário determinado - where é para filtrar - orderBy é pra deixar em ordem alfabética de acordo com o title - whereLike ajuda a buscar valores que contenham uma palavra determinada no meio de outras, a porcentagem antes e depois de title é porque vai ser ignorado o que vem antes e depois da palavra, vai ser procurado a palavra, ou uma cadeia de caracteres
+      profissionais = await knex("profissionais").whereLike("name", `%${name}%`).whereLike("área", `%${área}%`).orderBy("name") 
     }
 
-    const Tags = await knex("tags") //fazendo filtro nas tags onde o id seja igual do user_id
-    const ProfissionaisComTags = profissionais.map(note => { //percorrendo todas as notas e executando a função pra cada 'note' (variável auxiliar)
-      const ProfissionaisTags = Tags.filter(tag => tag.profissional_id === profissionais.id) //filtrando as tags da nota - comparando se note_id da tag é igual ao note.id 
+    const Tags = await knex("tags") 
+    const ProfissionaisComTags = profissionais.map(profissional => { 
+      const ProfissionaisTags = Tags.filter(tag => tag.profissional_id === profissional.id) 
       return {
-        ...profissional,
+        ...profissionais,
         tags: ProfissionaisTags
       }
     })
