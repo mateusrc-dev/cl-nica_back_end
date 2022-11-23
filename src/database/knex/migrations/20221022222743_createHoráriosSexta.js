@@ -1,9 +1,10 @@
 exports.up = knex => knex.schema.createTable("horáriosSexta", table => {
   table.increments("id")
-  table.integer("duração")
-  table.integer("horário")
+  table.text("duração")
+  table.text("horário")
   table.text("disponibilidade")
-  table.integer("id_profissional").references("id").inTable("profissionais")
+  table.integer("id_profissional").references("id").inTable("profissionais").onDelete("CASCADE")
+  table.integer("id_user").references("id").inTable("users").onDelete("CASCADE")
 })
 
 exports.down = knex => knex.schema.dropTable("horáriosSexta")
