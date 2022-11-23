@@ -97,6 +97,7 @@ class ProfissionaisController {
 
     if (tags) { 
       const filterTags = tags.split(',').map(tag => tag.trim()); 
+      
       profissionais = await knex("profissionais")
       .select([
         "profissionais.id",
@@ -118,7 +119,7 @@ class ProfissionaisController {
     const ProfissionaisComTags = profissionais.map(profissional => { 
       const ProfissionaisTags = Tags.filter(tag => tag.profissional_id === profissional.id) 
       return {
-        ...profissionais,
+        ...profissional,
         tags: ProfissionaisTags
       }
     })
