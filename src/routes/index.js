@@ -4,6 +4,8 @@ const profissionaisRouter = require("./profissionais.routes")
 const avaliaçõesRouter = require("./avaliações.routes")
 const horáriosSegundaRouter = require("./horáriosSegunda.routes")
 const horáriosTerçaRouter = require("./horáriosTerça.routes")
+const horáriosRouter = require("./horários.routes")
+const horáriosUserRouter = require("./horáriosUser.routes")
 const horáriosSegundaUserRouter = require("./horáriosSegundaUser.routes")
 const horáriosTerçaUserRouter = require("./horáriosTerçaUser.routes")
 const horáriosQuintaUserRouter = require("./horáriosQuintaUser.routes")
@@ -42,6 +44,8 @@ routes.use("/sabadouser", horáriosSábadoUserRouter)
 routes.use("/quinta", horáriosQuintaRouter)
 routes.use("/sexta", horáriosSextaRouter)
 routes.use("/sabado", horáriosSábadoRouter)
+routes.use("/horarios", horáriosRouter)
+routes.use("/horariosuser", horáriosUserRouter)
 
 
 module.exports = routes
