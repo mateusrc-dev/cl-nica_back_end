@@ -4,9 +4,11 @@ const HoráriosQuartaController = require("../Controllers/HoráriosQuartaControl
 const horáriosQuartaController = new HoráriosQuartaController()
 const ensureAuthenticated = require("../middlewares/ensureAuthenticated")
 
-horáriosQuartaRoutes.post("/quarta", ensureAuthenticated, horáriosQuartaController.create)
-horáriosQuartaRoutes.put("/quarta", ensureAuthenticated, horáriosQuartaController.update)
-horáriosQuartaRoutes.get("/quarta", ensureAuthenticated, horáriosQuartaController.index)
-horáriosQuartaRoutes.delete("/quarta", ensureAuthenticated, horáriosQuartaController.delete)
+horáriosQuartaRoutes.post("/", ensureAuthenticated, horáriosQuartaController.create)
+horáriosQuartaRoutes.put("/", ensureAuthenticated, horáriosQuartaController.update)
+horáriosQuartaRoutes.put("/:time/:id_profissional", ensureAuthenticated, horáriosQuartaController.updateTwo)
+horáriosQuartaRoutes.get("/:id_profissional", ensureAuthenticated, horáriosQuartaController.index)
+horáriosQuartaRoutes.get("/", ensureAuthenticated, horáriosQuartaController.show)
+horáriosQuartaRoutes.delete("/", ensureAuthenticated, horáriosQuartaController.delete)
 
 module.exports = horáriosQuartaRoutes

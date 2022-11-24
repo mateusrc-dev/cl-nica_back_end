@@ -4,9 +4,11 @@ const HoráriosSextaController = require("../Controllers/HoráriosSextaControlle
 const horáriosSextaController = new HoráriosSextaController()
 const ensureAuthenticated = require("../middlewares/ensureAuthenticated")
 
-horáriosSextaRoutes.post("/sexta", ensureAuthenticated, horáriosSextaController.create)
-horáriosSextaRoutes.put("/sexta", ensureAuthenticated, horáriosSextaController.update)
-horáriosSextaRoutes.get("/sexta", ensureAuthenticated, horáriosSextaController.index)
-horáriosSextaRoutes.delete("/sexta", ensureAuthenticated, horáriosSextaController.delete)
+horáriosSextaRoutes.post("/", ensureAuthenticated, horáriosSextaController.create)
+horáriosSextaRoutes.put("/", ensureAuthenticated, horáriosSextaController.update)
+horáriosSextaRoutes.put("/:time/:id_profissional", ensureAuthenticated, horáriosSextaController.updateTwo)
+horáriosSextaRoutes.get("/:id_profissional", ensureAuthenticated, horáriosSextaController.index)
+horáriosSextaRoutes.get("/", ensureAuthenticated, horáriosSextaController.show)
+horáriosSextaRoutes.delete("/", ensureAuthenticated, horáriosSextaController.delete)
 
 module.exports = horáriosSextaRoutes
