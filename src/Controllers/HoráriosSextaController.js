@@ -5,10 +5,10 @@ const knex = require("../database/knex")
 class HoráriosSextaController {
 
   async create(request, response) {
-    const { horário, disponibilidade } = request.body
+    const { horário, disponibilidade, id_user } = request.body
     const id_profissional = request.user.id;
     const database = await sqliteConnection()
-    await database.run("INSERT INTO horáriosSexta (horário, disponibilidade, id_profissional) VALUES (?, ?, ?)", [horário, disponibilidade, id_profissional])
+    await database.run("INSERT INTO horáriosSexta (horário, disponibilidade, id_profissional, id_user) VALUES (?, ?, ?, ?)", [horário, disponibilidade, id_profissional, id_user])
 
     return response.status(201).json()
   }
