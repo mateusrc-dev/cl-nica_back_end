@@ -5,21 +5,29 @@ const knex = require("../database/knex")
 class MensagensController {
 
   async create(request, response) {
-    const { mensagem } = request.body
-    const { user_id } = request.params
-    const { profissional_id } = request.params
+    const { mensagem, user_id, profissional_id } = request.body
     const database = await sqliteConnection()
     await database.run("INSERT INTO mensagens (mensagem, profissional_id, user_id) VALUES (?, ?, ?)", [mensagem, profissional_id, user_id])
 
     return response.status(201).json()
   }
 
-  async index(request, response) {
+  async indexUser(request, response) {
+    const { user_id } = request.body
+    const mensagens = await knex("mensagens")
+      .select(["mensagens.id", "profissionais.name", "profissionais.área"])
+      .where({ user_id })
+      .innerJoin("profissionais", "profissionais.id", "mensagens.profissional_id")
+
+    return response.json({ mensagens })
+  }
+
+  /*async indexProf(request, response) {
     const { user_id } = request.params
     const { profissional_id } = request.params
     const mensagens = await knex("avaliações").where({ profissional_id }).where({ user_id })
     return response.json({ mensagens })
-  }
+  }*/
 
   async show(request, response) {
     const { user_id } = request.query
