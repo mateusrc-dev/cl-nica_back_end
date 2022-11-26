@@ -8,7 +8,6 @@ exports.up = knex => knex.schema.createTable("horários", table => {
   table.text("status")
   table.integer("id_profissional").references("id").inTable("profissionais").onDelete("CASCADE")
   table.integer("id_user").references("id").inTable("users").onDelete("CASCADE")
-  
 })
 
 exports.down = knex => knex.schema.dropTable("horários")
