@@ -28,10 +28,7 @@ Também na página onde mostra os profissionais o usuário poderá pesquisar por
 profissional cadastrar, e também poderá favoritar seu profissional caso goste muito dele
 
 Na parte do profissional, ele pode logar na sua conta, alterar sua foto e descrição sobre o que faz, pode alterar os seus
-horários disponíveis, colocar tags, e vai aparecer também as pessoas que agendaram uma consulta no respectivo horário para ele, com as
-informações sobre esse usário, como nome, foto, queixas...
-
-Que tal tentar criar um chat entre cliente e profissional? (DESAFIO) ;) - pesquisar na internet como poderia ser feito!
+horários disponíveis, colocar tags, e vai aparecer também as pessoas que agendaram uma consulta no respectivo horário para ele, com as informações sobre esse usário, como nome, foto, queixas...
 
 A aplicação é para agendar consultas presenciais :)
 
@@ -43,4 +40,3 @@ A aplicação é para agendar consultas presenciais :)
 - Horários (id, dia, horário, disponibilidade, id_profissional)
 - Adm (id, nome, email, create, update)
 - Favorites (id, user_id, profissional_id)
-- Mensagens (id, mensagem, create, id_user, id_profissional)
