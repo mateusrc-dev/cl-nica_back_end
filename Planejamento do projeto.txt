@@ -28,15 +28,19 @@ Também na página onde mostra os profissionais o usuário poderá pesquisar por
 profissional cadastrar, e também poderá favoritar seu profissional caso goste muito dele
 
 Na parte do profissional, ele pode logar na sua conta, alterar sua foto e descrição sobre o que faz, pode alterar os seus
-horários disponíveis, colocar tags, e vai aparecer também as pessoas que agendaram uma consulta no respectivo horário para ele, com as informações sobre esse usário, como nome, foto, queixas...
+horários disponíveis, colocar tags, e vai aparecer também as pessoas que agendaram uma consulta no respectivo horário para ele, com as informações sobre esse usário, 
+como nome, foto, queixas...
 
 A aplicação é para agendar consultas presenciais :)
+
+######## ideia para adicionar a aplicação: quando a data de uma determinada consulta tiver passado, colocar a possibilidade de excluir do histórico aquela consulta e
+também colocar a confirmação se a consulta foi realizada :D ##########‌
 
 # Banco de dados que a aplicação vai ter (pode ser alterado a qualquer momento de acordo com os insight's):
 
 - Usuário (id, nome, email, avatar, queixas, create, update)
 - Profissionais (id, email, nome, área, descrição, tags, avatar, create, update)
 - Avaliações (id, id_user, id_profissional, depoimento, nota)
-- Horários (id, dia, horário, disponibilidade, id_profissional)
+- Horários (id, dia, horário, data, status, disponibilidade, id_profissional)
 - Adm (id, nome, email, create, update)
 - Favorites (id, user_id, profissional_id)

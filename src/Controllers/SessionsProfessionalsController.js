@@ -4,10 +4,10 @@ const { compare } = require("bcrypt")
 const authConfig = require("../configs/auth")
 const { sign } = require("jsonwebtoken")
 
-class SessionsProfissionalController {
+class SessionsProfessionalsController {
   async create(request, response) {
     const { email, password } = request.body
-    const user = await knex("profissionais").where({ email }).first()
+    const user = await knex("professionals").where({ email }).first()
     if (!user) {
       throw new AppError("E-mail e/ou senha incorreta!", 401)
     }
@@ -21,4 +21,4 @@ class SessionsProfissionalController {
   }
 }
 
-module.exports = SessionsProfissionalController
+module.exports = SessionsProfessionalsController
