@@ -79,51 +79,51 @@ class ProfessionalsController {
 
   async show(request, response) {
     const { id } = request.params //vamos pegar o id que foi passado como um parâmetro para poder encontrar a nota do usuário
-    const profissional = await knex("profissionais").where({ id }).first(); //pegando a primeira nota com first, sempre vai retornar uma única nota do id especificado
-    const tags = await knex("tags").where({ profissional_id: id }).orderBy("name"); //pegando a tag onde o note_id vai ser igual ao id passado no parâmetro/rota - orderBy é pra colocar em ordem alfabética
-    return response.json({ ...profissional, tags }); // os '...' é para 'despejar' os detalhes de note
+    const professional = await knex("professionals").where({ id }).first(); //pegando a primeira nota com first, sempre vai retornar uma única nota do id especificado
+    const tags = await knex("tags").where({ professional_id: id }).orderBy("name"); //pegando a tag onde o note_id vai ser igual ao id passado no parâmetro/rota - orderBy é pra colocar em ordem alfabética
+    return response.json({ ...professional, tags }); // os '...' é para 'despejar' os detalhes de note
   }
 
   async delete(request, response) { //criando a funcionalidade de deletar
     const { id } = request.params;
-    await knex("profissionais").where({ id }).delete(); //tudo vai ser deletado em cascata, links, tags, pois essas tabelas tem relação com notes
+    await knex("professionals").where({ id }).delete(); //tudo vai ser deletado em cascata, links, tags, pois essas tabelas tem relação com notes
     return response.json()
   }
 
   async index(request, response) { 
-    const { name, área, tags } = request.query;
-    let profissionais;
+    const { name, specialization, tags } = request.query;
+    let professionals;
 
     if (tags) { 
       const filterTags = tags.split(',').map(tag => tag.trim()); 
       
-      profissionais = await knex("profissionais")
+      professionals = await knex("professionals")
       .select([
-        "profissionais.id",
-        "profissionais.name",
-        "profissionais.descrição",
-        "profissionais.área",
-        "profissionais.avatar"
+        "professionals.id",
+        "professionals.name",
+        "professionals.description",
+        "professionals.specialization",
+        "professionals.avatar"
       ])
-      .whereLike("profissionais.name", `%${name}%`)
-      .whereLike("profissionais.área", `%${área}%`)
+      .whereLike("professionals.name", `%${name}%`)
+      .whereLike("professionals.specialization", `%${specialization}%`)
       .whereIn("tags.name", filterTags)
-      .innerJoin("tags", "tags.profissional_id", "profissionais.id")
+      .innerJoin("tags", "tags.professional_id", "professionals.id")
       
     } else {
-      profissionais = await knex("profissionais").whereLike("name", `%${name}%`).whereLike("área", `%${área}%`).orderBy("name") 
+      professionals = await knex("professionals").whereLike("name", `%${name}%`).whereLike("specialization", `%${specialization}%`).orderBy("name") 
     }
 
     const Tags = await knex("tags") 
-    const ProfissionaisComTags = profissionais.map(profissional => { 
-      const ProfissionaisTags = Tags.filter(tag => tag.profissional_id === profissional.id) 
+    const ProfessionalsWithTags = professionals.map(professionals => { 
+      const ProfessionalsTags = Tags.filter(tag => tag.professional_id === professionals.id) 
       return {
-        ...profissional,
-        tags: ProfissionaisTags
+        ...professionals,
+        tags: ProfessionalsTags
       }
     })
 
-    return response.json(ProfissionaisComTags)
+    return response.json(ProfessionalsWithTags)
   }
 }
 module.exports = ProfessionalsController;
