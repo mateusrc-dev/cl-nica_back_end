@@ -34,7 +34,9 @@ como nome, foto, queixas...
 A aplicação é para agendar consultas presenciais :)
 
 ######## ideia para adicionar a aplicação: quando a data de uma determinada consulta tiver passado, colocar a possibilidade de excluir do histórico aquela consulta e
-também colocar a confirmação se a consulta foi realizada :D ##########‌
+também colocar a confirmação se a consulta foi realizada :D (alterar o status) ##########‌
+########tatus: por realizar/ realizado/ desmarcado -> quando alguém cancelar (seja profissional ou usuário), o status mudar para desmarcado, e com isso aparecer a possibilidade
+de excluir a consulta do histórico
 
 # Banco de dados que a aplicação vai ter (pode ser alterado a qualquer momento de acordo com os insight's):
 
