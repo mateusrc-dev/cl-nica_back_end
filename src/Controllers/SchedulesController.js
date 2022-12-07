@@ -50,52 +50,39 @@ class SchedulesController {
   }
 
   async index(request, response) {
-    const { id_profissional } = request.params;
-    const { dia_da_semana, semana } = request.body;
+    const id_professional = request.user.id;
 
-    const horários = await knex("horários")
+    const schedules = await knex("schedules")
       .select([
-        "horários.id",
-        "horários.horário",
-        "horários.disponibilidade",
+        "schedules.id",
+        "schedules.time",
+        "schedules.availability",
+        "schedules.date",
         "users.name",
         "users.queixas",
         "users.avatar",
       ])
-      .where({ id_profissional })
-      .where({ dia_da_semana })
-      .where({ semana })
-      .innerJoin("users", "users.id", "horários.id_user")
-      .orderBy("horários.horário");
+      .where({ id_professional })
+      .innerJoin("users", "users.id", "schedules.id_user")
+      .orderBy("schedules.date");
 
-    //const horários = await knex("horáriosSegunda").where({ id_profissional })
-    return response.json({ horários });
+    return response.json({ schedules });
   }
 
-  async show(request, response) {
-    const { horário, dia_da_semana, semana } = request.body;
-    const horários = await knex("horários")
-      .select([
-        "horários.id",
-        "horários.horário",
-        "horários.disponibilidade",
-        "users.name",
-        "users.queixas",
-        "users.avatar",
-      ])
-      .where({ horário })
-      .where({ dia_da_semana })
-      .where({ semana })
-      .innerJoin("users", "users.id", "horários.id_user");
+  async indexTwo(request, response) {
+    const { id_professional } = request.params;
+    const { availability } = request.body;
 
-    //const horários = await knex("horáriosSegunda").where({ user_id }).first()
-    return response.json({ horários });
+    const schedules = await knex("schedules").where({ id_professional }).where({ availability }).orderBy("schedules.date");
+
+    return response.json({ schedules });
   }
 
   async delete(request, response) {
     const { id } = request.body;
-    await knex("horários").where({ id }).delete();
+    await knex("schedules").where({ id }).delete();
     return response.json();
   }
 }
+
 module.exports = SchedulesController;
