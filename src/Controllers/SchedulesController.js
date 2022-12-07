@@ -16,7 +16,7 @@ class SchedulesController {
   }
 
   async update(request, response) {
-    const { availability, justification, status, id } = request.body;
+    const { availability, status, id } = request.body;
     const id_user = request.user.id;
     const database = await sqliteConnection();
 
@@ -25,19 +25,16 @@ class SchedulesController {
     UPDATE schedules SET 
     availability = ?,
     status = ?,
-    justification = ?,
     id_user = ?
     WHERE id = ?`,
-      [availability, status, justification, id_user, id]
+      [availability, status, id_user, id]
     );
     return response.json();
   }
 
   async updateTwo(request, response) {
     const { id } = request.params;
-    const { status, justification, availability } = request.body;
-    let id_user = request.user.id;
-    id_user = null
+    const { status, justification } = request.body;
 
     const database = await sqliteConnection();
 
@@ -45,27 +42,9 @@ class SchedulesController {
       `
     UPDATE schedules SET 
     status = ?,
-    justification = ?,
-    availability = ?,
-    id_user = ?
+    justification = ?
     WHERE id = ?`,
-      [status, justification, availability, id_user, id]
-    );
-    return response.json();
-  }
-
-  async updateThree(request, response) {
-    const { id } = request.params;
-    const { status } = request.body;
-
-    const database = await sqliteConnection();
-
-    await database.run(
-      `
-    UPDATE horários SET 
-    status = ?
-    WHERE id = ?`,
-      [status, id]
+      [status, justification, id]
     );
     return response.json();
   }
