@@ -56,8 +56,10 @@ class SchedulesController {
       .select([
         "schedules.id",
         "schedules.time",
+        "schedules.duration",
         "schedules.availability",
         "schedules.date",
+        "schedules.status",
         "users.name",
         "users.queixas",
         "users.avatar",
