@@ -22,7 +22,7 @@ class ProfessionalsController {
 
   async update(request, response) { //funcionalidade de atualização do usuário
     const { name, email, specialization, description, tags, password, old_password } = request.body //pegando o corpo da requisição
-    const user_id = request.user.id; //acessando a propriedade que foi criada no middleware que contem o id do usuário que foi extraído do token
+    const user_id = request.professional.id; //acessando a propriedade que foi criada no middleware que contem o id do usuário que foi extraído do token
     //const { id } = request.params; //o id está sendo pego do caminho, pois ele foi colocado como parâmetro
     const database = await sqliteConnection() //fazendo conexão com o banco de dados
     const user = await database.get("SELECT * FROM professionals WHERE id = (?)", [user_id]) //selecionando todos as colunas da linha que tem o respectivo id

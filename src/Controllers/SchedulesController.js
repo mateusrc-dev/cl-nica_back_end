@@ -5,7 +5,7 @@ const knex = require("../database/knex");
 class SchedulesController {
   async create(request, response) {
     const { time, availability, date, duration } = request.body;
-    const id_professional = request.user.id;
+    const id_professional = request.professional.id;
     const database = await sqliteConnection();
     await database.run(
       "INSERT INTO schedules (time, availability, id_professional, date, duration) VALUES (?, ?, ?, ?, ?)",
@@ -50,7 +50,7 @@ class SchedulesController {
   }
 
   async index(request, response) {
-    const id_professional = request.user.id;
+    const id_professional = request.professional.id;
 
     const schedules = await knex("schedules")
       .select([
