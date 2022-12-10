@@ -9,6 +9,7 @@ const favoritesRouter = require("./favorites.routes")
 const sessionsRouter = require("./sessions.routes")
 const sessionsProfessionalsRouter = require("./sessionsProfessionals.routes")
 const searchRouter = require("./search.routes")
+const tagsRouter = require("./tags.routes")
 
 const routes = Router()
 
@@ -22,5 +23,7 @@ routes.use("/assessments", assessmentsRouter)
 routes.use("/assessmentsUser", assessmentsUserRouter)
 routes.use("/schedules", schedulesRouter)
 routes.use("/schedulesUser", schedulesUserRouter)
+routes.use("/tags", tagsRouter)
+
 
 module.exports = routes

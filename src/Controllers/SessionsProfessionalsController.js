@@ -8,9 +8,11 @@ class SessionsProfessionalsController {
   async create(request, response) {
     const { email, password } = request.body
     const professional = await knex("professionals").where({ email }).first()
+
     if (!professional) {
       throw new AppError("E-mail e/ou senha incorreta!", 401)
     }
+
     const passwordMatched = await compare(password, professional.password)
     if (!passwordMatched) {
       throw new AppError("E-mail e/ou senha incorreta!", 401)
