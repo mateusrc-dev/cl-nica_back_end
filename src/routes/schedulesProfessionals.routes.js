@@ -5,6 +5,8 @@ const schedulesProfessionalController = new SchedulesProfessionalController()
 const ensureAuthenticatedProfessional = require("../middlewares/ensureAuthenticatedProfessional")
 
 schedulesProfessionalsRoutes.get("/:id_professional", ensureAuthenticatedProfessional, schedulesProfessionalController.index)
-schedulesProfessionalsRoutes.get("/", schedulesProfessionalController.show)
+schedulesProfessionalsRoutes.get("/", ensureAuthenticatedProfessional, schedulesProfessionalController.show)
+schedulesProfessionalsRoutes.delete("/", ensureAuthenticatedProfessional, schedulesProfessionalController.delete)
+
 
 module.exports = schedulesProfessionalsRoutes

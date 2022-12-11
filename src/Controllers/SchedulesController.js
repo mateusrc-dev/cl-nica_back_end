@@ -34,7 +34,7 @@ class SchedulesController {
 
   async updateTwo(request, response) {
     const { id } = request.params;
-    const { status, justification } = request.body;
+    const { status, justification } = request.query;
 
     const database = await sqliteConnection();
 
