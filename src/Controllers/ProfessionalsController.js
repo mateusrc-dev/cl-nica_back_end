@@ -21,7 +21,7 @@ class ProfessionalsController {
   }
 
   async update(request, response) { //funcionalidade de atualização do usuário
-    const { name, email, specialization, description, tags, password, old_password } = request.body //pegando o corpo da requisição
+    const { id, name, email, specialization, description, tags, password, old_password } = request.body //pegando o corpo da requisição
     const user_id = request.professional.id; //acessando a propriedade que foi criada no middleware que contem o id do usuário que foi extraído do token
     //const { id } = request.params; //o id está sendo pego do caminho, pois ele foi colocado como parâmetro
     const database = await sqliteConnection() //fazendo conexão com o banco de dados
@@ -37,7 +37,8 @@ class ProfessionalsController {
     const tagsInsert = tags.map(name => {
       return {
         name,
-        professional_id: user_id
+        professional_id: user_id,
+        professional_specialization: specialization
       }
     })
 
@@ -66,6 +67,7 @@ class ProfessionalsController {
 
     await database.run(`
     UPDATE professionals SET 
+    id = ?,
     name = ?, 
     email = ?,
     password = ?, 
@@ -73,7 +75,7 @@ class ProfessionalsController {
     description = ?,
     update_at = DATETIME('now')
     WHERE id = ?`,
-      [user.name, user.email, user.password, user.specialization, user.description, user_id]); //aqui está sendo atualizado o banco de dados, são comandos SQL (UPDATE users SET) pra atualizar o banco de dados - WHERE é pra identificar a linha específica que será modificado o valor das colunas - DATETIME() é uma função do banco de dados que pega o momento atual (data e hora), estamos fazendo isso porque a função Date() do JS tem um padrão de escrever a data e hora diferente da função do banco de dados
+      [id, user.name, user.email, user.password, user.specialization, user.description, user_id]); //aqui está sendo atualizado o banco de dados, são comandos SQL (UPDATE users SET) pra atualizar o banco de dados - WHERE é pra identificar a linha específica que será modificado o valor das colunas - DATETIME() é uma função do banco de dados que pega o momento atual (data e hora), estamos fazendo isso porque a função Date() do JS tem um padrão de escrever a data e hora diferente da função do banco de dados
     return response.json()
   }
 
