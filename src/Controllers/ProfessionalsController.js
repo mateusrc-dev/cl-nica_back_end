@@ -110,7 +110,7 @@ class ProfessionalsController {
       .whereLike("professionals.name", `%${name}%`)
       .whereLike("professionals.specialization", `%${specialization}%`)
       .whereIn("tags.name", filterTags)
-      .innerJoin("tags", "tags.professional_id", "professionals.id")
+      .innerJoin("tags", "tags.professional_id", "professionals.id").groupBy("professionals.name");
       
     } else {
       professionals = await knex("professionals").whereLike("name", `%${name}%`).whereLike("specialization", `%${specialization}%`).orderBy("name") 
