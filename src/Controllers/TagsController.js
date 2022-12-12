@@ -10,7 +10,8 @@ class TagsController {
         "tags.professional_specialization",
       ])
       .whereLike("tags.professional_specialization", `%${specialization}%`)
-      .innerJoin("tags", "tags.professional_id", "professionals.id");
+      .innerJoin("tags", "tags.professional_id", "professionals.id").groupBy("tags.name");
+      
     return response.json(tags);
   }
 
