@@ -34,7 +34,7 @@ class SchedulesController {
 
   async updateConfirm(request, response) {
     const { availability, id } = request.query;
-    const {status} = request.params;
+    const { status } = request.params;
     const database = await sqliteConnection();
 
     await database.run(
@@ -59,13 +59,14 @@ class SchedulesController {
         "schedules.availability",
         "schedules.date",
         "schedules.status",
+        "schedules.justification",
         "users.name",
         "users.queixas",
         "users.avatar",
       ])
       .where({ id_professional })
       .innerJoin("users", "users.id", "schedules.id_user")
-      .orderBy("schedules.date")
+      .orderBy("schedules.date");
 
     return response.json({ schedules });
   }
@@ -74,7 +75,10 @@ class SchedulesController {
     const { id_professional } = request.params;
     const { availability } = request.query;
 
-    const schedules = await knex("schedules").where({ id_professional }).where({ availability }).orderBy("schedules.date");
+    const schedules = await knex("schedules")
+      .where({ id_professional })
+      .where({ availability })
+      .orderBy("schedules.date");
 
     return response.json({ schedules });
   }

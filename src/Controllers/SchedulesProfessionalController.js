@@ -4,21 +4,8 @@ class SchedulesProfessionalController {
   async index(request, response) {
     const { id_professional } = request.params;
     const schedules = await knex("schedules")
-    .select([
-      "schedules.id",
-      "schedules.time",
-      "schedules.duration",
-      "schedules.availability",
-      "schedules.date",
-      "schedules.status",
-      "schedules.justification",
-      "users.name",
-      "users.queixas",
-      "users.avatar",
-    ])
-    .where({ id_professional })
-    .innerJoin("users", "users.id", "schedules.id_user")
-    .orderBy("schedules.date");
+      .where({ id_professional })
+      .orderBy("schedules.date");
 
     return response.json({
       schedules,
