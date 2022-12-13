@@ -66,14 +66,14 @@ class SchedulesController {
       ])
       .where({ id_professional })
       .innerJoin("users", "users.id", "schedules.id_user")
-      .orderBy("schedules.date");
+      .orderBy("schedules.date")
 
     return response.json({ schedules });
   }
 
   async indexTwo(request, response) {
     const { id_professional } = request.params;
-    const { availability } = request.body;
+    const { availability } = request.query;
 
     const schedules = await knex("schedules").where({ id_professional }).where({ availability }).orderBy("schedules.date");
 
