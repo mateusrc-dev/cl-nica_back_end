@@ -32,19 +32,18 @@ class SchedulesController {
     return response.json();
   }
 
-  async updateTwo(request, response) {
-    const { id } = request.params;
-    const { status, justification } = request.query;
-
+  async updateConfirm(request, response) {
+    const { availability, id } = request.query;
+    const {status} = request.params;
     const database = await sqliteConnection();
 
     await database.run(
       `
     UPDATE schedules SET 
-    status = ?,
-    justification = ?
+    availability = ?,
+    status = ?
     WHERE id = ?`,
-      [status, justification, id]
+      [availability, status, id]
     );
     return response.json();
   }

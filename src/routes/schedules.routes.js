@@ -7,7 +7,7 @@ const ensureAuthenticatedProfessional = require("../middlewares/ensureAuthentica
 
 schedulesRoutes.post("/", ensureAuthenticatedProfessional, schedulesController.create)
 schedulesRoutes.put("/", ensureAuthenticated, schedulesController.update)
-schedulesRoutes.put("/:id", schedulesController.updateTwo)
+schedulesRoutes.put("/:status", ensureAuthenticated, schedulesController.updateConfirm)
 schedulesRoutes.get("/", ensureAuthenticatedProfessional, schedulesController.index)
 schedulesRoutes.get("/:id_professional", schedulesController.indexTwo)
 schedulesRoutes.delete("/", schedulesController.delete)
