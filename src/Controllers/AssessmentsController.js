@@ -13,11 +13,11 @@ class AssessmentsController {
   }
 
   async update(request, response) {
-    const { testimony, id_user } = request.query
+    const { testimony, id_user, id_professional } = request.query
 
     const database = await sqliteConnection()
 
-    const assess = await knex("assessments").where({ id_user })
+    const assess = await knex("assessments").where({ id_user }).where({ id_professional })
 
     assess.testimony = testimony ?? assess.testimony
 
@@ -25,18 +25,18 @@ class AssessmentsController {
     UPDATE assessments SET 
     testimony = ?, 
     update_at = DATETIME('now')
-    WHERE id_user = ?`,
-      [assess.testimony, id_user]);
+    WHERE id_user = ? AND id_professional = ?`,
+      [assess.testimony, id_user, id_professional]);
     return response.json()
   }
 
   async updateTwo(request, response) {
     const { id_user } = request.params
-    const { note } = request.query
+    const { note, id_professional } = request.query
   
     const database = await sqliteConnection()
 
-    const assess = await knex("assessments").where({ id_user })
+    const assess = await knex("assessments").where({ id_user }).where({ id_professional })
 
     assess.note = note ?? assess.note
 
@@ -44,8 +44,8 @@ class AssessmentsController {
     UPDATE assessments SET 
     note = ?,
     update_at = DATETIME('now')
-    WHERE id_user = ?`,
-      [ assess.note, id_user]);
+    WHERE id_user = ? AND id_professional = ?`,
+      [ assess.note, id_user, id_professional]);
     return response.json()
   }
 
@@ -75,8 +75,8 @@ class AssessmentsController {
   }
 
   async delete(request, response) {
-    const { id_user } = request.query
-    await knex("assessments").where({ id_user }).delete()
+    const { id_user, id_professional } = request.query
+    await knex("assessments").where({ id_user }).where({ id_professional }).delete()
     return response.json()
   }
 }

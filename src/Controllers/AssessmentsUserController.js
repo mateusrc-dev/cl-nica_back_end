@@ -5,7 +5,7 @@ const knex = require("../database/knex")
 class AssessmentsUserController {
 
   async update(request, response) {
-    const { testimony, note, id } = request.body
+    const { testimony, id } = request.query
 
     const database = await sqliteConnection()
 
@@ -13,32 +13,48 @@ class AssessmentsUserController {
 
     assess.testimony = testimony ?? assess.testimony
 
+    await database.run(`
+    UPDATE assessments SET 
+    testimony = ?,
+    update_at = DATETIME('now')
+    WHERE id = ?`,
+      [assess.testimony, id]);
+    return response.json()
+  }
+
+  async updateTwo(request, response) {
+    const { id } = request.params
+    const { note } = request.query
+  
+    const database = await sqliteConnection()
+
+    const assess = await knex("assessments").where({ id })
+
     assess.note = note ?? assess.note
 
     await database.run(`
     UPDATE assessments SET 
-    testimony = ?, 
     note = ?,
     update_at = DATETIME('now')
     WHERE id = ?`,
-      [assess.testimony, assess.note, id]);
+      [ assess.note, id]);
     return response.json()
   }
+
 
   async index(request, response) {
     const id_user = request.user.id;
     
     const testimony = await knex("assessments")
-    .select(["professionals.id", "professionals.name", "professionals.avatar", "professionals.specialization", "assessments.testimony", "assessments.note"])
+    .select(["professionals.name", "professionals.avatar", "assessments.id", "professionals.specialization", "assessments.testimony", "assessments.note"])
     .where({ id_user })
     .innerJoin("professionals", "professionals.id", "assessments.id_professional").orderBy("professionals.name")
 
-    //const testimony = await knex("assessments").where({ id_professional })
     return response.json({ testimony })
   }
 
   async delete(request, response) {
-    const { id } = request.body
+    const { id } = request.query
     await knex("assessments").where({ id }).delete()
     return response.json()
   }
