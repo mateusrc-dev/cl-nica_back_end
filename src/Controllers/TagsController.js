@@ -5,6 +5,7 @@ class TagsController {
     const { specialization } = request.query;
     const tags = await knex("professionals")
       .select([
+        "tags.id",
         "tags.name",
         "tags.professional_id",
         "tags.professional_specialization",
