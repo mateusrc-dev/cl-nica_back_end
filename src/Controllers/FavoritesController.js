@@ -9,7 +9,7 @@ class favoritesController {
   }
 
   async delete(request, response) {
-    const { professional_id } = request.body
+    const { professional_id } = request.params
     const user_id = request.user.id
     await knex("favorites").where({ professional_id }).where({ user_id }).delete()
     return response.json()
