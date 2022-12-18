@@ -21,7 +21,7 @@ Para utilizar o projeto como desenvolvedor siga os seguintes passos:
 
 2. Na parte de banck-end, você pode apagar o database e depois que ativar novamente o servidor com o comando "npm run dev" o database será criado novamente e a tabela 'users', mas também será necessário posteriormente usar o comando "npm run migrate" para criar as migrations (pois outras tabelas criadas com esse método) que utilizam o knex.
 
-3. Para utilizar o usuário de administrador da aplicação é importante usar o insomnia para criar um usuário para o administrador, pois não existe uma rota na aplicação pra criar esse usuário de administrador, existe apenas as rotas para criar contas para o cliente na aplicação - a rota para ser utilizada no insomnia para criar a conta do administrador é "localhost:3333/professionals" e os dados precisam ser inseridos em formato JSON (segue exemplo abaixo): 
+3. Para utilizar o usuário de profissional da aplicação é importante usar o insomnia para criar um usuário para o profissional, pois não existe uma rota na aplicação pra criar esse usuário de profissional, existe apenas as rotas para criar contas para o cliente na aplicação - a rota para ser utilizada no insomnia para criar a conta do profissional é "localhost:3333/professionals" e os dados precisam ser inseridos em formato JSON (segue exemplo abaixo): 
 
 <p align="center">
   <img width="800" src="src/assets/insomnia.jpg" >
