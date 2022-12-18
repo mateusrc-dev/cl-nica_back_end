@@ -13,7 +13,7 @@ Nesse aplicativo usamos as seguintes técnicas:
 - Uso de estados (useState)
 - Uso de hooks (useEffect, useRef)
 - Uso de ícones (react-icons)
-- Uso de frameworks como moment, express, etc.
+- Uso de bibliotecas como moment, express, etc.
 
 Para utilizar o projeto como desenvolvedor siga os seguintes passos:
 
